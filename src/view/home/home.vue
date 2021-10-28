@@ -12,7 +12,7 @@
         </el-input>
         <el-button type="primary" @click="setSQL" class="btn_signup">ConnectSQL</el-button>
         <el-button type="primary" @click="clearData" class="btn_signup">clearData</el-button>
-        <!-- <el-button type="primary" @click="conn" class="btn_signup">conn</el-button> -->
+        <el-button type="primary" @click="transaction" class="btn_signup">transaction</el-button>
       </el-card>
       <el-card class="master_card">
         <el-card class="tree_card">  
@@ -64,8 +64,11 @@ export default {
     },
 
     // 开事务模式
-    conn(){
-
+    async transaction(){
+      const res = await userApi.transaction(this.sqlcontent.split(';\n').splice(this.sqlcontent.split(';\n').length - 1, 1));
+      if(res.data.meta.code == '200'){
+        console.log('成功啦');
+      }
     },
 
   },

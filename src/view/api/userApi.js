@@ -19,4 +19,8 @@ export default  class analysisApi extends BaseApi {
     static async getTableData(params){
         return this.proxyPost('/api/getTableData', params)
     }
+
+    static async transaction(params){
+        return this.proxyPost('/api/transaction', params)
+    }
 }
