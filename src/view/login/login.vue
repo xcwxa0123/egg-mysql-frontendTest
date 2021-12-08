@@ -39,6 +39,10 @@ export default {
     methods: {
         async login() {
             console.log('login!');
+            this.$router.resolve({ path: '/aosFwy/franchiseesCustomer/add', query: { CustType:9,
+              id:1,
+              CloudID:1,} 
+            })
             // this.$router.push({ name: 'home' })
             const res = await userApi.getUser({text: 'test'});
             console.log('res', res);

@@ -1,4 +1,4 @@
-const login = r => require.ensure([], () => r(require('./login.vue')), 'login');
+const login = () => import('./login.vue')
 // TODO 可尝试加校验，如果校验不通过则跳回login，参考AOS
 export default [
     {
