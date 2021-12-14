@@ -2,7 +2,7 @@ import BaseApi from '../axios/baseApi.js';
 
 export default  class analysisApi extends BaseApi {
     static async getUser(params) {
-        return this.proxyGet('/api/getUser', params)
+        return this.proxyPost('/api/getUser', params)
     }
 
     static async postTest(params) {
@@ -22,5 +22,8 @@ export default  class analysisApi extends BaseApi {
 
     static async transaction(params){
         return this.proxyPost('/api/transaction', params)
+    }
+    static async signUp(params){
+        return this.proxyPost('/api/signUp', params)
     }
 }
