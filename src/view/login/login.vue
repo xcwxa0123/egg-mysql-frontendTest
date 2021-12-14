@@ -4,10 +4,10 @@
       <el-card :class="isActive ? 'active' : ''">
             <div slot="header">FAKE LOGIN</div>
             <el-form ref="form" :model="form" label-width="80px">
-                <el-form-item label="AC：">
+                <el-form-item label="AC:">
                     <el-input v-model="form.account"></el-input>
                 </el-form-item>
-                <el-form-item label="PW：">
+                <el-form-item label="PW:">
                     <el-input v-model="form.password" show-password></el-input>
                 </el-form-item>
                 <!-- <el-form-item label="即时配送">
@@ -20,12 +20,15 @@
                 <el-button type="primary" @click="signup" class="btn_signup">Sign Up</el-button>
             </el-form>
       </el-card>
+      <sign-up v-if="showDialog" :visiable="showDialog" @setVisible="setVisible"></sign-up>
   </div>
 </template>
 
 <script>
 import userApi from '../api/userApi.js'
+import signUp from './components/signUp.vue'
 export default {
+    components: { signUp },
     data() {
         return {
             form: {
@@ -33,25 +36,37 @@ export default {
                 password: '',
                 isRemember: false
             },
-            isActive: false
+            isActive: false,
+            showDialog: false
         }
     },
     methods: {
+        async setVisible(flag, data = undefined) {
+            if(data && Object.keys(data).length){
+                const signUpRes = await userApi.signUp(data)
+                if(signUpRes.data.meta && signUpRes.data.meta.code == 200){
+                    if(signUpRes.data.data && signUpRes.data.data.status == 1){
+                        this.$message.success(signUpRes.data.meta.message)
+                        this.showDialog = flag
+                    } else {
+                        this.$message.warning(signUpRes.data.meta.message)
+                    }
+                } else {
+                    this.$message.warning(signUpRes.data.meta.message)
+                }
+            }
+        },
         async login() {
-            console.log('login!');
-            this.$router.resolve({ path: '/aosFwy/franchiseesCustomer/add', query: { CustType:9,
-              id:1,
-              CloudID:1,} 
-            })
-            // this.$router.push({ name: 'home' })
-            const res = await userApi.getUser({text: 'test'});
+            const res = await userApi.getUser(this.form);
+            if(res.data && res.data.data && res.data.data.status == 1){
+                this.$router.push({ name: 'home' })
+            } else {
+                this.$message.warning('错啦')
+            }
             console.log('res', res);
         },
         async signup() {
-            console.log('signup!');
-            const res = await userApi.postTest({val: '12312323'});
-            console.log('res', res);
-            // this.isActive = true;
+            this.showDialog = true;
         }
     }
 }

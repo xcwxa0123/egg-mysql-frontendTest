@@ -1,5 +1,6 @@
 <template>
   <div class="warp_body">
+      <el-button type="primary" class="btn_signup pab l50" @click="back2Login">回到首页</el-button>
       <el-card class="msg_card">
         <el-input
           type="textarea"
@@ -61,6 +62,9 @@ export default {
 
     getTableData(data){
       this.tableData = data;
+    },
+    back2Login(){
+      this.$router.push({ name: 'login' })
     },
 
     // 开事务模式
@@ -132,5 +136,11 @@ export default {
     background: rgb(255 255 255 / 54%);
     color:#409EFF;
     margin-top: 20px;
+}
+.pab{
+  position: absolute;
+}
+.l50{
+  left: 50px;
 }
 </style>
