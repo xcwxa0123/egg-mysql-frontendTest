@@ -1,6 +1,6 @@
 <template>
   <div class="warp_body">
-      <el-button type="primary" class="btn_signup pab l50" @click="back2Login">回到首页</el-button>
+      <el-button type="primary" class="btn_signup pab l50" @click="back2taplab">回到首页</el-button>
       <el-card class="msg_card">
         <el-input
           type="textarea"
@@ -63,8 +63,8 @@ export default {
     getTableData(data){
       this.tableData = data;
     },
-    back2Login(){
-      this.$router.push({ name: 'login' })
+    back2taplab(){
+      this.$router.push({ name: 'taplab' })
     },
 
     // 开事务模式

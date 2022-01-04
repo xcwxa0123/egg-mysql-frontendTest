@@ -59,7 +59,9 @@ export default {
         async login() {
             const res = await userApi.getUser(this.form);
             if(res.data && res.data.data && res.data.data.status == 1){
-                this.$router.push({ name: 'home' })
+                const target = this.$router.resolve({ name: 'taplab' })
+                console.log('target', target)
+                window.location.href = target.href
             } else {
                 this.$message.warning('错啦')
             }
