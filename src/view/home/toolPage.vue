@@ -10,7 +10,7 @@
           <el-radio :label="1">key-value模式</el-radio>
         </el-radio-group>
         <div v-if="this.data && this.cols">
-          <el-select v-model="sheetIndex" placeholder="请选择要输出的sheet">
+          <el-select v-model="sheetIndex" placeholder="请选择要输出的sheet" @change="sheetChange">
             <el-option
               v-for="item in sheetNameList"
               :key="item.value"
@@ -23,22 +23,23 @@
           <el-select v-model="selectedKey" placeholder="请选择key列">
             <el-option
               v-for="item in colList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :key="item.key"
+              :label="item.name"
+              :value="item.key">
             </el-option>
           </el-select>
           <el-select v-model="selectedValue" placeholder="请选择value列">
             <el-option
               v-for="item in colList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :key="item.key"
+              :label="item.name"
+              :value="item.name">
             </el-option>
           </el-select>
         </div>
         <div>
-          <el-button type="primary">输出</el-button>
+          <el-button v-if="modeType === 1" type="primary" @click="_trans2DataJSON(1)">key-value输出</el-button>
+          <el-button v-if="modeType === 0" type="primary" @click="_trans2DataJSON(0)">全输出</el-button>
         </div>
       </el-card>
       <el-card class="master_card">
@@ -80,41 +81,74 @@ export default {
 			/* Boilerplate to set up FileReader */
 			const reader = new FileReader();
 			reader.onload = (e) => {
+        this.data = this.data || {}
+        this.cols = this.cols || {}
 				/* Parse data */
 				const ab = e.target.result;
 				const wb = XLSX.read(new Uint8Array(ab), {type:'array'});
         console.log('wb.SheetNames', wb.SheetNames);
 				/* Get first worksheet */
-				const wsname = wb.SheetNames[0];
-				const ws = wb.Sheets[wsname];
+        wb.SheetNames.forEach((wsname, index) => {
+          this.sheetNameList.push({
+            label: wsname,
+            value: Number(index)
+          })
+          const ws = wb.Sheets[wsname]
+          this.data[wsname] = XLSX.utils.sheet_to_json(ws, {header:1});
+          this.cols[wsname] = make_cols(ws['!ref']);
+        });
+				// const wsname = wb.SheetNames[0];
+				// const ws = wb.Sheets[wsname];
 				/* Convert array of arrays */
-				const data = XLSX.utils.sheet_to_json(ws, {header:1});
+				// const data = XLSX.utils.sheet_to_json(ws, {header:1});
 				/* Update state */
-				this.data = data;
-        console.log('data', data);
-				this.cols = make_cols(ws['!ref']);
+				// this.data = data;
+        const target = this.sheetNameList.find(item => item.value === this.sheetIndex)
+        this.colList = this.cols[target.label]
+        console.log('data', this.data);
+				// this.cols = make_cols(ws['!ref']);
         console.log('this.cols', this.cols);
-        this._trans2DataJSON(data, this.cols)
+        // this._trans2DataJSON(data, this.cols)
 			};
 			reader.readAsArrayBuffer(file);
 		},
-    _trans2DataJSON(data, cols) {
+    _trans2DataJSON(modeType) {
       let that = this;
-      let target = cols.find(item => item.name == 'L')
-      let targetData = data.filter(item => { if(item[target.key]) return item })
-      let tempObj = {}
-      targetData = targetData.map(item => {
-        let key = item[5]
-        let valueList = String(item[target.key]).includes('\r\n') ? item[target.key].split('\r\n') : [item[target.key]]
-        let obj = {}
-        valueList.forEach(element => {
-          obj[element] = key
-        });
-          Object.assign(tempObj, obj)
-        return obj
-      })
-      console.log('tempObj', tempObj)
-      that.dataJSON = JSON.stringify(tempObj)
+      switch (modeType) {
+        case 1:
+          {
+            const targetSheet = this.sheetNameList.find(item => item.value === this.sheetIndex)
+            const selectedData = this.data[targetSheet.label]
+            let target = this.colList.find(item => item.name == this.selectedValue)
+            let targetData = selectedData.filter(item => { if(item[target.key]) return item })
+            let tempObj = {}
+            targetData = targetData.map(item => {
+              let key = item[that.selectedKey]
+              let valueList = String(item[target.key]).includes('\r\n') ? item[target.key].split('\r\n') : [item[target.key]]
+              let obj = {}
+              valueList.forEach(element => {
+                obj[element] = key
+              });
+                Object.assign(tempObj, obj)
+              return obj
+            })
+            console.log('tempObj', tempObj)
+            that.dataJSON = JSON.stringify(tempObj)
+          }
+          break;
+        case 0:
+          {
+            const targetSheet = this.sheetNameList.find(item => item.value === this.sheetIndex)
+            const selectedData = this.data[targetSheet.label]
+            console.log('selectedData', selectedData)
+            that.dataJSON = JSON.stringify(selectedData)
+          }
+          break;
+      }
+    },
+    sheetChange() {
+      const target = this.sheetNameList.find(item => item.value === this.sheetIndex)
+      this.colList = this.cols[target.label]
     }
   },
   created() {
