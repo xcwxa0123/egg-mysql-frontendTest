@@ -5,10 +5,13 @@
       </el-card>
       <el-card class="master_card">
             <el-card class="item_card">
-                <el-button type="primary" class="btn_signup" @click="jumpTo('toolPage')">工具页</el-button>
+                <el-button type="primary" class="btn_signup" @click="jumpTo('excelParse')">excel转化</el-button>
             </el-card>
             <el-card class="item_card">
                 <el-button type="primary" class="btn_signup" @click="jumpTo('home')">SQL</el-button>
+            </el-card>
+            <el-card class="item_card">
+                <el-button type="primary" class="btn_signup" @click="jumpTo('inputArea')">@输入框</el-button>
             </el-card>
       </el-card>
   </div>

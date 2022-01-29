@@ -1,6 +1,7 @@
 const home = () => import('./home')
 const taplab = () => import('./taplab')
-const toolPage = () => import('./toolPage')
+const excelParse = () => import('./excelParse')
+const inputArea = () => import('./inputArea')
 export default [
     {
         path: '/home',
@@ -13,8 +14,13 @@ export default [
         component: taplab
     },
     {
-        path: '/toolPage',
-        name: 'toolPage',
-        component: toolPage
+        path: '/excelParse',
+        name: 'excelParse',
+        component: excelParse
+    },
+    {
+        path: '/inputArea',
+        name: 'inputArea',
+        component: inputArea
     }
 ]
