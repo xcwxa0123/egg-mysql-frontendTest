@@ -1,0 +1,14 @@
+{
+  "name": "fmtestttt",
+  "version": "1.0.0",
+  "author": "you",
+  "category": "block",
+  "description": "test",
+  "main": "index.js",
+  "keywords": "",
+  "files": [
+    "src",
+    "lib",
+    "app"
+  ]
+}

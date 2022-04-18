@@ -4,15 +4,35 @@
       <el-card class="msg_card">
       </el-card>
       <el-card class="master_card">
-            <el-card class="item_card">
-                <el-button type="primary" class="btn_signup" @click="jumpTo('excelParse')">excel转化</el-button>
-            </el-card>
-            <el-card class="item_card">
-                <el-button type="primary" class="btn_signup" @click="jumpTo('home')">SQL</el-button>
-            </el-card>
-            <el-card class="item_card">
-                <el-button type="primary" class="btn_signup" @click="jumpTo('inputArea')">@输入框</el-button>
-            </el-card>
+          <el-row :gutter="10">
+                <el-col :span="8">
+                    <el-card class="item_card">
+                        <el-button type="primary" class="btn_signup" @click="jumpTo('excelParse')">excel转化</el-button>
+                    </el-card>
+                </el-col>
+                <el-col :span="8">
+                    <el-card class="item_card">
+                        <el-button type="primary" class="btn_signup" @click="jumpTo('home')">SQL</el-button>
+                    </el-card>
+                </el-col>
+                <el-col :span="8">
+                    <el-card class="item_card">
+                        <el-button type="primary" class="btn_signup" @click="jumpTo('inputArea')">@输入框</el-button>
+                    </el-card>
+                </el-col>
+          </el-row>
+          <el-row :gutter="10">
+                <el-col :span="8">
+                    <el-card class="item_card">
+                        <el-button type="primary" @click="jumpTo('arm2js')" class="btn_signup">arm2js</el-button>
+                    </el-card>
+                </el-col>
+                <el-col :span="8">
+                    <el-card class="item_card">
+                        <el-button type="primary" @click="jumpTo('luckySheetTest')" class="btn_signup">luckySheetTest</el-button>
+                    </el-card>
+                </el-col>
+          </el-row>
       </el-card>
   </div>
 </template>
@@ -62,7 +82,7 @@ export default {
     background: rgb(255 255 255 / 54%);
 }
 .item_card{
-    width: 30%;
+    width: 100%;
     height: 200px;
     /* margin: 70px auto; */
     margin-bottom: 20px;
