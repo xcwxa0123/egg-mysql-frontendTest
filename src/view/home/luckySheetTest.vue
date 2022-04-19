@@ -84,8 +84,9 @@ export default {
                 sheetData.storageData.forEach(element => {
                     element.forEach(item => {
                         if(item && item.f) {
-                            delete item.m
-                            delete item.v
+                            // delete item.m
+                            // delete item.v
+                            item.v = null
                         }
                     })
                     rangeValueMap.push(element)
@@ -146,6 +147,7 @@ export default {
       this.getCurrentSheetPrintRange();
       const html = luckysheet.getRangeHtml();
       window.document.querySelector("#luckysheet").innerHTML = html;
+      window.print()
     },
     setRangeValue(item) {
       let target = [
